@@ -1,31 +1,25 @@
 /* Calculate SQL */
-If ( Get ( RecordNumber )  = 1 ; 
-	"DROP TABLE IF EXISTS dsv;
-	CREATE TABLE IF NOT EXISTS dsv ( 
-	k int(5) NOT NULL, 
-	t int(5) NOT NULL, 
-	y int(4) NOT NULL, 
-	m int(2) NOT NULL, 
-	d int(2) NOT NULL, 
-	w int(1) NOT NULL, 
-	u int(10) NOT NULL, 
-	x varchar(10) NOT NULL, 
-	h varchar(2) NOT NULL, 
-	o tinyint(1) NOT NULL, 
-	PRIMARY KEY (k)
+If ( Get ( RecordNumber ) = 1 ; 
+	"DROP TABLE IF EXISTS tablename;
+	CREATE TABLE IF NOT EXISTS tablename ( 
+	id int(5) NOT NULL, 
+	text varchar(10) NOT NULL, 
+	bool tinyint(1) NOT NULL, 
+	PRIMARY KEY (id)
 	) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=" & (Get ( FoundCount ) + 1) & "; " ; "" )
 & 
 /* Every 1000 records, terminate statement and start a new one */
-If ( Mod ( (k + 999) ; 1000 );
+If ( Mod ( (id + 999) ; 1000 );
 	"" ; 
-	"INSERT INTO dsv (k,t,y,m,d,w,u,x,h,o) VALUES " 
+	"INSERT INTO dsv (id,text,bool) VALUES " 
 )
-& "(" & k & "," & t & "," & y & "," & m & "," & d & "," & w & "," & u & "," & "\"" & x & "\"" & "," & "\"" & h & "\"" & "," & o & ")"
+/* for text fields, enclose values with quotes */
+& "(" & id & "\"" & text & "\"" & bool & ")"
 & 
-/* Terminate statement if last record */
+/* Terminate statement at last record */
 If ( Get ( RecordNumber )  = Get ( FoundCount ); 
 	";" ; 
-	If ( Mod ( (k + 1000) ; 1000 ) ; 
+	If ( Mod ( (id + 1000) ; 1000 ) ; 
 		"," ; 
 		";" 
 	) 
