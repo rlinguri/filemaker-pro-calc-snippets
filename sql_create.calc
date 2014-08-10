@@ -6,11 +6,15 @@ If ( Get ( RecordNumber ) = 1 ;
 	text varchar(10) NOT NULL, 
 	bool tinyint(1) NOT NULL, 
 	PRIMARY KEY (id)
-	) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=" & (Get ( FoundCount ) + 1) & "; " ; "" )
+	) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=" & (Get ( FoundCount ) + 1) & "; " ;
+	/* else */
+	"" 
+)
 & 
 /* Every 1000 records, terminate statement and start a new one */
 If ( Mod ( (id + 999) ; 1000 );
 	"" ; 
+	/* else */
 	"INSERT INTO dsv (id,text,bool) VALUES " 
 )
 /* for text fields, enclose values with quotes */
@@ -18,9 +22,11 @@ If ( Mod ( (id + 999) ; 1000 );
 & 
 /* Terminate statement at last record */
 If ( Get ( RecordNumber )  = Get ( FoundCount ); 
-	";" ; 
+	";" ;
+	/* else */
 	If ( Mod ( (id + 1000) ; 1000 ) ; 
 		"," ; 
+		/* else */
 		";" 
 	) 
 )
