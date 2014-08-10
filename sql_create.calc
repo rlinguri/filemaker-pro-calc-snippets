@@ -15,12 +15,14 @@ If ( Get ( RecordNumber )  = 1 ;
 	PRIMARY KEY (k)
 	) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=" & (Get ( FoundCount ) + 1) & "; " ; "" )
 & 
+/* Every 1000 records, terminate statement and start a new one */
 If ( Mod ( (k + 999) ; 1000 );
 	"" ; 
 	"INSERT INTO dsv (k,t,y,m,d,w,u,x,h,o) VALUES " 
 )
 & "(" & k & "," & t & "," & y & "," & m & "," & d & "," & w & "," & u & "," & "\"" & x & "\"" & "," & "\"" & h & "\"" & "," & o & ")"
 & 
+/* Terminate statement if last record */
 If ( Get ( RecordNumber )  = Get ( FoundCount ); 
 	";" ; 
 	If ( Mod ( (k + 1000) ; 1000 ) ; 
